@@ -31,7 +31,7 @@ local default_make_make_display = function(values)
     return displayer({
       { entry.value.index .. ":", "TelescopePromptPrefix" },
       { entry.value.title },
-      { entry.value.client_name, "TelescopeResultsComment" },
+      { entry.value.client_name,  "TelescopeResultsComment" },
     })
   end
 end

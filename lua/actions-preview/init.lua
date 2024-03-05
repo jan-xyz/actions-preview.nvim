@@ -43,17 +43,26 @@ end
 
 local function on_code_action_results(results, ctx)
   local actions = {}
+  local keys = {}
   for client_id, result in pairs(results) do
     for _, action in pairs(result.result or {}) do
-      table.insert(actions, Action.new(ctx, client_id, action))
+      actions[action] = Action.new(ctx, client_id, action)
+      table.insert(keys, action)
     end
   end
-  if #actions == 0 then
+  if #keys == 0 then
     vim.notify("No code actions available", vim.log.levels.INFO)
     return
   end
 
-  backend.select(config, actions)
+  vim.ui.select(keys, {
+    prompt = "available actions",
+    format_item = function(item)
+      return item.title
+    end
+  }, function(choice)
+    backend.select(config, { actions[choice] })
+  end)
 end
 
 local function code_action_request(params)
